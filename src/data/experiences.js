@@ -1,39 +1,30 @@
 // data/experiences.js
 const experiences = [
   {
-    position: 'Research Assistant',
-    company: 'Binghamton University',
-    location: 'Binghamton, NY',
-    date: 'July 2024 - Present',
-    tech: 'Python, ML, Image Processing, Security Testing',
+    position: 'Software Development Engineer',
+    company: 'Capgemini',
+    location: 'Bengaluru, India',
+    date: 'June 2022 - Dec 2023',
+    tech: 'Java, Python, C++, Wireshark, GDB, Jenkins, Linux',
     points: [
-      'Engineered image byte manipulation techniques in Python that successfully bypassed C2PA\'s cryptographic checks.',
-      'Identified a critical date-handling vulnerability and currently leveraging machine learning techniques for further exploitation.'
+      'Analyzed and optimized Wi-Fi application software layers, specifically targeting the interface between the UI and lower Wi-Fi stack, using tools such as Wireshark and GDB for seamless communication and performance optimization.',
+      'Executed hardware-software integration tests and conducted Root Cause Analysis on STA/P2P/AP roles, using Linux command-line tools and custom scripts to diagnose and resolve defects, ensuring proper functionality and robust performance across Wi-Fi software layers.',
+      'Reproduced customer-reported issues using Jenkins and in-house testing frameworks for sanity and unit testing, and integrated vendor-provided fixes to enhance compatibility and performance within the Wi-Fi stack.'
     ]
   },
   {
-    position: 'Machine Learning Research Intern',
-    company: 'IOTA Informatics Pvt Ltd',
-    location: 'Bhopal, India',
-    date: 'May 2022 - Nov 2022',
-    tech: 'Python, PyTorch, Neural Network',
+    position: 'Software Development Engineer Intern',
+    company: 'Capgemini',
+    location: 'Bengaluru, India',
+    date: 'Mar 2022 - Jun 2022',
+    tech: 'Wireshark, Linux, Socket Programming, TCP/IP',
     points: [
-      'Designed a CNN model using PyTorch to accurately recognize handwritten characters in doctors\' notes.',
-      'Increased recognition precision to 91% by applying OCR-specific preprocessing techniques and optimizing the model through cross-validation.'
+      'Performed detailed analysis of WLAN 802.11a/b/g/n/i and P2P specifications, conducting a functional breakdown of WLAN drivers to map and optimize communication flows.',
+      'Executed packet capture and analysis on WLAN devices using tools like Wireshark, validating WLAN specification compliance and troubleshooting communication issues.',
+      'Mapped and optimized the Linux WLAN stack architecture, detailing interactions between wpa_supplicant, hostapd, nl80211, cfg80211, mac80211, and ath9k driver to enhance performance and reliability.',
+      'Implemented and tested socket programming using the TCP/IP protocol suite, leveraging Unix system calls for network communication and debugging.'
     ]
   },
-  {
-    position: 'Project Trainee',
-    company: 'Indian Space Research Organization',
-    location: 'Ahmedabad, India',
-    date: 'Jan 2022 - May 2022',
-    tech: 'Microwave Engineering, Ansys HFSS',
-    points: [
-      'Modeled and simulated a square coaxial 4-way power divider for a 2 GHz phased array antenna using Ansys HFSS.',
-      'Achieved equal signal split and precise quadrature phase differences across output ports, enabling efficient circular polarization for the antenna.'
-    ]
-  }
 ];
 
 export default experiences;
-

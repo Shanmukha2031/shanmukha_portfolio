@@ -1,15 +1,24 @@
 // data/projects.js
+
 const projects = [
   {
-    title: 'FPGA-Based Matrix Multiplier for AI Acceleration',
-    tech: 'Verilog, Vivado, Embedded Systems',
+    title: 'Custom Kernel Development and Virtual File System Implementation',
+    tech: 'C, Kernel Programming, File Systems, Memory Management',
     points: [
-      'Built and fine-tuned a 4x4 matrix multiplier on a Basys 3 FPGA for AI workloads.',
-      'Reduced computation latency and optimized FPGA resource usage.',
-    ],
+      'Developed kernel processes and threads using C, with emphasis on thread manipulation, synchronization, and context switching.',
+      'Constructed a Virtual File System (RAMFS) with implemented system calls and polymorphism to manage file operations efficiently.',
+      'Implemented virtual memory management, including creating a virtual address space, page fault handler, and user-space shell using shadow objects.'
+    ]
   },
-  // Add other projects here
+  {
+    title: 'Reinforcement Learning-based Cluster Formation in Ad-hoc Networks',
+    tech: 'Python, Reinforcement Learning, Network Simulation',
+    points: [
+      'Engineered communication protocols for multi-agent systems in ad-hoc networks without pre-existing wireless infrastructure using Python.',
+      'Implemented a reinforcement learning algorithm using PyTorch to optimize cluster formation among agents based on stable communication channels.',
+      'Developed a simulation environment using NS3 to model multi-agent systems, enabling testing and training of the learning algorithm across various agent trajectories.'
+    ]
+  }
 ];
 
 export default projects;
-

@@ -8,11 +8,12 @@ import ExperienceSection from './components/ExperienceSection';
 import EducationSection from './components/EducationSection';
 import ProjectsSection from './components/ProjectsSection';
 import SkillsSection from './components/SkillsSection';
-import CertificationsSection from './components/CertificationsSection';
+// Removed import for CertificationsSection
 import ContactSection from './components/ContactSection';
 
 function App() {
-  const navItems = ['About', 'Experience', 'Education', 'Projects', 'Skills', 'Certifications', 'Contact'];
+  // Removed 'Certifications' from the navItems array
+  const navItems = ['About', 'Experience', 'Education', 'Projects', 'Skills', 'Contact'];
   
   const scrollToSection = useCallback((section) => {
     const element = document.getElementById(section.toLowerCase());
@@ -33,7 +34,7 @@ function App() {
         <EducationSection />
         <ProjectsSection />
         <SkillsSection />
-        <CertificationsSection />
+        {/* Removed <CertificationsSection /> */}
         <ContactSection />
       </div>
       <style jsx global>{`

@@ -65,22 +65,14 @@ const NavBar = ({ navItems, scrollToSection }) => {
   // Optional: Animated logo variants
   const LogoVariants = () => (
     <div className="flex items-center space-x-2">
-      {/* Variant 1: Simple text */}
-      {/* <span className={`text-[${colors.primary}] text-2xl font-bold tracking-wider`}>SC_</span> */}
-      
       {/* Variant 2: Glowing effect */}
       <span className={`text-2xl font-bold tracking-wider animate-pulse`}
             style={{ 
               color: colors.primary,
               textShadow: `0 0 10px ${colors.primary}`,
             }}>
-        &lt;SC/&gt;
+        &lt;Shanmukha/&gt;
       </span>
-      
-      {/* Variant 3: Terminal style */}
-      {/* <span className={`text-[${colors.primary}] text-2xl font-bold tracking-wider`}>
-        ~/SC$
-      </span> */}
     </div>
   );
 

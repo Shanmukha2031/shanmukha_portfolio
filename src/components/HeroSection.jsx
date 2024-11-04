@@ -3,12 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 // Import your images
 import programmingIcon from '../assets/icons/programming.png';
-import signalIcon from '../assets/icons/signal.png';
 import embeddedIcon from '../assets/icons/embedded.png';
 import fpgaIcon from '../assets/icons/fpga.png';
 import mlIcon from '../assets/icons/machineL.png';
 import hsIcon from '../assets/icons/hs.png';
-import mathIcon from '../assets/icons/math.png';
+
 
 const HeroSection = () => {
   const [highlightedSkill, setHighlightedSkill] = useState(null);
@@ -16,46 +15,34 @@ const HeroSection = () => {
 
   const skills = [
     {
-      name: 'Programming',
+      name: 'Programming Languages',
       icon: programmingIcon,
-      level: 90,
-      detail: 'C/C++, Python, VHDL/Verilog, MATLAB'
-    },
-    {
-      name: 'Signal Processing',
-      icon: signalIcon,
-      level: 85,
-      detail: 'DSP, Digital Filters, FFT, Transforms'
+      level: 93,
+      detail: 'Java, Python, C++, C, Embedded C'
     },
     {
       name: 'Embedded Systems',
       icon: embeddedIcon,
-      level: 82,
-      detail: 'Microcontrollers, RTOS, IoT Integration'
+      level: 96,
+      detail: 'Socket Programming, MAC, 802.11 (a/b/g/n/ac)'
     },
     {
-      name: 'Machine Learning',
+      name: 'Networking Protocols',
       icon: mlIcon,
       level: 90,
-      detail: 'TensorFlow, PyTorch, TinyML, Edge AI'
+      detail: 'TCP/IP Suite, ICMP, ARP'
     },
     {
-      name: 'FPGA Design & Development',
+      name: 'Development Environments',
       icon: fpgaIcon,
-      level: 75,
-      detail: 'Xilinx, Intel Quartus, High-Level Synthesis'
-    },
-    {
-      name: 'Hardware-Software Interfacing',
-      icon: hsIcon,
-      level: 78,
-      detail: 'SPI, I2C, UART, JTAG, Protocol Debugging'
-    },
-    {
-      name: 'Mathematics & Optimization',
-      icon: mathIcon,
       level: 92,
-      detail: 'Linear Algebra, Calculus, Statistics, Probability'
+      detail: 'Eclipse, PyTorch, Linux Kernel'
+    },
+    {
+      name: 'Development Tools',
+      icon: hsIcon,
+      level: 84,
+      detail: 'Android Studio, Git, Jenkins'
     }
   ];
 
@@ -70,32 +57,32 @@ const HeroSection = () => {
         key={skill.name}
         onMouseEnter={() => setHighlightedSkill(actualIndex)}
         onMouseLeave={() => setHighlightedSkill(null)}
-        className={`group relative bg-[#222222]/80 p-5 rounded border
+        className={`group relative bg-[#222222]/80 p-6 rounded border
           transition-all duration-300 hover:scale-[1.02]
-          ${isSecondRow ? 'w-[calc(25%-1rem)]' : ''}
+          ${isSecondRow ? 'w-[calc(25%-1.5rem)]' : ''}
           ${highlightedSkill === actualIndex ? 
             'border-violet-500/50 shadow-lg' : 
             'border-gray-800'}`}
       >
-        <div className="flex flex-col items-center space-y-3">
-          <div className="w-12 h-12 flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-14 h-14 flex items-center justify-center">
             <img 
               src={skill.icon}
               alt={skill.name}
-              className={`w-10 h-10 object-contain transition-all duration-300 ${
+              className={`w-12 h-12 object-contain transition-all duration-300 ${
                 highlightedSkill === actualIndex ? 'opacity-100' : 'opacity-70'
               }`}
             />
           </div>
-          <div className="space-y-1">
-            <div className="text-sm tracking-wider font-bold text-gray-200">
+          <div className="space-y-2">
+            <div className="text-base tracking-wider font-bold text-gray-200">
               {skill.name}
             </div>
-            <div className="text-xs text-gray-400 h-8 leading-4">
+            <div className="text-sm text-gray-400 h-10 leading-5">
               {skill.detail}
             </div>
           </div>
-          <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500"
               style={{ width: `${skill.level}%` }}
@@ -117,25 +104,25 @@ const HeroSection = () => {
                 fontFamily: "'VT323', monospace",
                 textShadow: '0 0 10px rgba(255, 248, 197, 0.3), 2px 2px 0px #4a4a4a'
               }}>
-            Siddhant Chaurasia
+            Shanmukha Subrahmanyam Rallapalli
           </h1>
           <p className="text-2xl tracking-widest font-light text-cyan-400"
              style={{ 
                fontFamily: "'VT323', monospace",
                textShadow: '0 0 10px rgba(255, 236, 97, 0.3)' 
              }}>
-            Electrical and Computer Engineer
+            Computer Science Engineer
           </p>
         </div>
 
         <div className="max-w-5xl mx-auto px-4">
           {/* First Row */}
-          <div className="grid grid-cols-4 gap-5 mb-5">
+          <div className="grid grid-cols-4 gap-6 mb-6">
             {skills.slice(0, 4).map((skill, index) => renderSkillCard(skill, index))}
           </div>
 
           {/* Second Row - Perfectly Centered */}
-          <div className="flex justify-center gap-5">
+          <div className="flex justify-center gap-6">
             {skills.slice(4).map((skill, index) => renderSkillCard(skill, index, true))}
           </div>
         </div>

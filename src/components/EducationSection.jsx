@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, ChevronDown, BookOpen } from 'lucide-react';
 import education from '../data/education';
 import bing from '../assets/bing.png';
-import muj from '../assets/muj.png';
+import muj from '../assets/muj.png'; // Manipal University Jaipur logo
+import mlr from '../assets/mlrit.jpeg'; // MLR Institute of Technology logo
 
 const CourseList = ({ courses, isOpen, toggleOpen, type }) => (
   <div className="mt-4">
@@ -48,9 +49,23 @@ const CourseList = ({ courses, isOpen, toggleOpen, type }) => (
 );
 
 const EducationCard = ({ edu, index, isOpen, toggleOpen }) => {
-  const logo = edu.institution.includes('Binghamton') ? bing : muj;
-  const isBinghamton = edu.institution.includes('Binghamton');
-  
+  // Determine which logo to use based on the institution name
+  let logo;
+  let scaleClass = '';
+
+  if (edu.institution.includes('Binghamton')) {
+    logo = bing;
+    scaleClass = 'scale-150';
+  } else if (edu.institution.includes('Manipal')) {
+    logo = muj;
+    scaleClass = 'scale-100'; // Adjust as needed
+  } else if (edu.institution.includes('MLR Institute')) {
+    logo = mlr;
+    scaleClass = 'scale-125'; // Adjust as needed to properly fit
+  } else {
+    logo = bing; // Fallback to Binghamton if not matched
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
@@ -86,8 +101,7 @@ const EducationCard = ({ edu, index, isOpen, toggleOpen }) => {
                   <img
                     src={logo}
                     alt={edu.institution}
-                    className={`w-full h-full object-contain
-                              ${isBinghamton ? 'scale-150' : ''}`}
+                    className={`w-full h-full object-cover ${scaleClass}`}
                   />
                 </div>
               </div>

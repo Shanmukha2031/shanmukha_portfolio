@@ -10,21 +10,21 @@ const ContactSection = () => (
         <p className="text-xl">Let's connect and discuss opportunities!</p>
         <div className="flex justify-center space-x-8">
           <a
-            href="mailto:schaurasia@binghamton.edu"
+            href="mailto:srallapalli@binghamton.edu"
             className="flex items-center space-x-2 text-[#00ff00] hover:text-[#33ff33] transition-colors"
           >
             <Mail className="w-6 h-6" />
             <span>Email</span>
           </a>
           <a
-            href="tel:+16072978221"
+            href="tel:+1(607)-788-0415"
             className="flex items-center space-x-2 text-[#00ff00] hover:text-[#33ff33] transition-colors"
           >
             <Phone className="w-6 h-6" />
             <span>Call</span>
           </a>
           <a
-            href="https://linkedin.com/in/siddchau27"
+            href="https://www.linkedin.com/in/shanmukha20/"
             className="flex items-center space-x-2 text-[#00ff00] hover:text-[#33ff33] transition-colors"
           >
             <Linkedin className="w-6 h-6" />

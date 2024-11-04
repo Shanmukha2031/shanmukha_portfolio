@@ -1,25 +1,35 @@
 // data/skillsData.js
+
 const skillsData = [
   {
     category: 'Programming Languages',
-    skills: ['C', 'C++', 'Python', 'MATLAB', 'R', 'Verilog', 'Assembly', 'JavaScript'],
+    skills: ['Java', 'Python', 'MATLAB', 'C++', 'C', 'Embedded C'],
   },
   {
-    category: 'Frameworks & Libraries',
-    skills: ['PyTorch', 'TensorFlow', 'scikit-learn', 'FreeRTOS', 'Embedded Linux', 'Hadoop'],
-  },
-  {
-    category: 'Tools & Instrumentation',
+    category: 'Protocols and Interfaces',
     skills: [
-      'SPICE',
-      'Ansys HFSS',
-      'AutoCAD Electrical',
-      'MATLAB/Simulink',
-      'Xilinx Vivado',
-      'Oscilloscopes',
-      'Network Analyzers',
-      'JTAG',
-      'Altium Designer',
+      'Socket Programming',
+      'Internet Protocol Suite (TCP/IP)',
+      'ICMP',
+      'ARP',
+      'MAC/RLC/PDCP',
+      '802.11(a/b/g/n/ac)',
+    ],
+  },
+  {
+    category: 'Tools and Technologies',
+    skills: [
+      'Android Studio',
+      'PyTorch',
+      'Eclipse',
+      'Git',
+      'WireShark',
+      'Vim',
+      'GCC',
+      'GNU Make',
+      'JIRA',
+      'Jenkins',
+      'Linux Kernel',
     ],
   },
   {
@@ -29,4 +39,3 @@ const skillsData = [
 ];
 
 export default skillsData;
-

@@ -1,117 +1,55 @@
-// components/Background.jsx
 import React, { useEffect, useRef } from 'react';
 
-const Background = () => {
+const NetworkBackground = () => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const animationFrameRef = useRef(null);
   const mousePosRef = useRef({ x: 0, y: 0 });
-  const particlesRef = useRef([]);
-
-  // Perlin noise implementation
-  const noise = (() => {
-    const permutation = Array.from({ length: 256 }, (_, i) => i)
-      .sort(() => Math.random() - 0.5);
-
-    const p = [...permutation, ...permutation];
-
-    const fade = t => t * t * t * (t * (t * 6 - 15) + 10);
-    
-    const lerp = (t, a, b) => a + t * (b - a);
-    
-    const grad = (hash, x, y, z) => {
-      const h = hash & 15;
-      const u = h < 8 ? x : y;
-      const v = h < 4 ? y : h === 12 || h === 14 ? x : z;
-      return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
-    };
-
-    return (x, y, z) => {
-      const X = Math.floor(x) & 255;
-      const Y = Math.floor(y) & 255;
-      const Z = Math.floor(z) & 255;
-
-      x -= Math.floor(x);
-      y -= Math.floor(y);
-      z -= Math.floor(z);
-
-      const u = fade(x);
-      const v = fade(y);
-      const w = fade(z);
-
-      const A = p[X] + Y;
-      const AA = p[A] + Z;
-      const AB = p[A + 1] + Z;
-      const B = p[X + 1] + Y;
-      const BA = p[B] + Z;
-      const BB = p[B + 1] + Z;
-
-      return lerp(w,
-        lerp(v,
-          lerp(u, grad(p[AA], x, y, z), grad(p[BA], x - 1, y, z)),
-          lerp(u, grad(p[AB], x, y - 1, z), grad(p[BB], x - 1, y - 1, z))
-        ),
-        lerp(v,
-          lerp(u, grad(p[AA + 1], x, y, z - 1), grad(p[BA + 1], x - 1, y, z - 1)),
-          lerp(u, grad(p[AB + 1], x, y - 1, z - 1), grad(p[BB + 1], x - 1, y - 1, z - 1))
-        )
-      );
-    };
-  })();
-
-  class Particle {
+  const nodesRef = useRef([]);
+  
+  class Node {
     constructor(x, y, config) {
       this.config = config;
-      this.reset(x, y);
-    }
-
-    reset(x, y) {
       this.x = x;
       this.y = y;
-      this.age = 0;
-      this.maxAge = this.config.minAge + Math.random() * (this.config.maxAge - this.config.minAge);
-      this.speed = this.config.particleSpeed * (0.8 + Math.random() * 0.4);
-      this.vx = 0;
-      this.vy = 0;
+      this.vx = (Math.random() - 0.5) * config.nodeSpeed;
+      this.vy = (Math.random() - 0.5) * config.nodeSpeed;
+      this.size = 1.5; // Smaller nodes for better performance with higher density
     }
 
-    update(time, width, height) {
-      const angle = noise(
-        this.x * this.config.noiseScale,
-        this.y * this.config.noiseScale,
-        time * this.config.timeScale
-      ) * Math.PI * 2;
+    update(width, height) {
+      this.x += this.vx;
+      this.y += this.vy;
 
-      // Mouse influence
+      if (this.x <= 0 || this.x >= width) this.vx *= -1;
+      if (this.y <= 0 || this.y >= height) this.vy *= -1;
+
       const dx = this.x - mousePosRef.current.x;
       const dy = this.y - mousePosRef.current.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const mouseEffect = Math.max(0, 1 - dist / this.config.mouseRadius);
-      
-      // make mouse eff strong
-      this.vx = Math.cos(angle) * this.speed;
-      this.vy = Math.sin(angle) * this.speed;
       
       if (dist < this.config.mouseRadius) {
-        //strong replulsion
-        this.vx += (dx / dist) * this.config.mouseInfluence;
-        this.vy += (dy / dist) * this.config.mouseInfluence;
-      
-      }
-      
-      this.x += this.vx;
-      this.y += this.vy;
-      this.age++;
-
-      if (this.age > this.maxAge || 
-          this.x < 0 || this.x > width || 
-          this.y < 0 || this.y > height) {
-        this.reset(Math.random() * width, Math.random() * height);
+        const force = (this.config.mouseRadius - dist) / this.config.mouseRadius;
+        const repulsion = this.config.mouseRepulsion * force;
+        
+        // Stronger repulsion effect
+        this.vx += (dx / dist) * repulsion * 2;
+        this.vy += (dy / dist) * repulsion * 2;
+        
+        // Add circular motion around mouse
+        this.vx += dy / dist * repulsion;
+        this.vy -= dx / dist * repulsion;
       }
 
-      return {
-        alpha: Math.sin((this.age / this.maxAge) * Math.PI) * this.config.particleColor.a
-      };
+      const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+      if (speed > this.config.maxSpeed) {
+        this.vx = (this.vx / speed) * this.config.maxSpeed;
+        this.vy = (this.vy / speed) * this.config.maxSpeed;
+      }
+
+      // More dynamic movement
+      this.vx += (Math.random() - 0.5) * 0.3;
+      this.vy += (Math.random() - 0.5) * 0.3;
     }
   }
 
@@ -119,26 +57,23 @@ const Background = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     contextRef.current = ctx;
-    let time = 0;
 
-    // Configuration
     const config = {
-      particleCount: 2500,
-      particleSpeed: 1.2,
-      particleSize: 1,
-      particleColor: { r: 0, g: 255, b: 170, a: 0.35 }, // Reduced from 0.4 to 0.35,
-      noiseScale: 0.003,
-      timeScale: 0.0005,
-      mouseInfluence: 1.0,
-      mouseRadius: 100,
-      fadeSpeed: 0.085,
-      minAge: 50,
-      maxAge: 150
+      nodeCount: 800, // Significantly increased node count
+      nodeSpeed: 1.2,
+      maxSpeed: 2.5,
+      connectionDistance: 200, // Increased connection distance
+      mouseRadius: 200, // Larger mouse influence
+      mouseRepulsion: 1.2, // Stronger mouse effect
+      backgroundColor: '#1a1a1a',
+      nodeColor: '#00ffaa',
+      connectionColor: 'rgba(0, 255, 170, 0.3)', // Increased base opacity
+      minConnectionOpacity: 0.2 // Higher minimum opacity
     };
 
-    const initParticles = () => {
-      particlesRef.current = Array.from({ length: config.particleCount }, () => 
-        new Particle(
+    const initNodes = () => {
+      nodesRef.current = Array.from({ length: config.nodeCount }, () => 
+        new Node(
           Math.random() * canvas.width,
           Math.random() * canvas.height,
           config
@@ -161,48 +96,109 @@ const Background = () => {
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${docHeight}px`;
       ctx.scale(dpr, dpr);
-      initParticles();
-    };
-    
-    const handleMouseMove = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    mousePosRef.current = {
-        x: (e.clientX - rect.left) * dpr,
-        y: (e.clientY + window.scrollY) * dpr  // Include scroll position
-        };
+      initNodes();
     };
 
+    const handleMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      mousePosRef.current = {
+        x: (e.clientX - rect.left) * dpr,
+        y: (e.clientY + window.scrollY) * dpr
+      };
+    };
 
     const handleScroll = () => {
-      const rect = canvas.getBoundingClientRect();
       mousePosRef.current = {
         ...mousePosRef.current,
         y: mousePosRef.current.y + window.scrollY
       };
     };
 
+    const drawNode = (node) => {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+      ctx.fillStyle = config.nodeColor;
+      ctx.fill();
+    };
+
+    const drawConnections = () => {
+      const nodes = nodesRef.current;
+      
+      // Draw all base connections
+      ctx.lineWidth = 0.8; // Thinner lines for better performance
+      for (let i = 0; i < nodes.length; i++) {
+        const nodeA = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const nodeB = nodes[j];
+          const dx = nodeA.x - nodeB.x;
+          const dy = nodeA.y - nodeB.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < config.connectionDistance) {
+            // Calculate distance from mouse for additional opacity
+            const mouseDx = (nodeA.x + nodeB.x) / 2 - mousePosRef.current.x;
+            const mouseDy = (nodeA.y + nodeB.y) / 2 - mousePosRef.current.y;
+            const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+            const mouseInfluence = Math.max(0, 1 - mouseDistance / (config.mouseRadius * 1.5));
+            
+            // Enhanced opacity calculation
+            const normalizedDist = 1 - distance / config.connectionDistance;
+            const baseAlpha = Math.max(
+              config.minConnectionOpacity,
+              normalizedDist * 0.4
+            );
+            
+            // Increase opacity for connections near mouse
+            const alpha = baseAlpha + mouseInfluence * 0.3;
+
+            ctx.beginPath();
+            ctx.moveTo(nodeA.x, nodeA.y);
+            ctx.lineTo(nodeB.x, nodeB.y);
+            ctx.strokeStyle = `rgba(0, 255, 170, ${alpha})`;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Enhance connections near mouse
+      const mouseX = mousePosRef.current.x;
+      const mouseY = mousePosRef.current.y;
+      
+      ctx.lineWidth = 1;
+      nodes.forEach((nodeA, i) => {
+        const dx = nodeA.x - mouseX;
+        const dy = nodeA.y - mouseY;
+        const distToMouse = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distToMouse < config.mouseRadius * 1.5) {
+          nodes.slice(i + 1).forEach(nodeB => {
+            const distance = Math.sqrt(
+              Math.pow(nodeA.x - nodeB.x, 2) + 
+              Math.pow(nodeA.y - nodeB.y, 2)
+            );
+            
+            if (distance < config.connectionDistance) {
+              const alpha = 0.4 * (1 - distToMouse / (config.mouseRadius * 1.5));
+              ctx.beginPath();
+              ctx.moveTo(nodeA.x, nodeA.y);
+              ctx.lineTo(nodeB.x, nodeB.y);
+              ctx.strokeStyle = `rgba(0, 255, 170, ${alpha})`;
+              ctx.stroke();
+            }
+          });
+        }
+      });
+    };
+
     const animate = () => {
-      ctx.fillStyle = `rgba(26, 26, 26, ${config.fadeSpeed})`;
+      ctx.fillStyle = config.backgroundColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.beginPath();
-      ctx.strokeStyle = `rgba(${config.particleColor.r}, ${config.particleColor.g}, 
-                             ${config.particleColor.b}, ${config.particleColor.a})`;
-      ctx.lineWidth = config.particleSize;
+      nodesRef.current.forEach(node => node.update(canvas.width, canvas.height));
+      drawConnections();
+      nodesRef.current.forEach(drawNode);
 
-      particlesRef.current.forEach(particle => {
-        const { alpha } = particle.update(time, canvas.width, canvas.height);
-        
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(${config.particleColor.r}, ${config.particleColor.g}, 
-                               ${config.particleColor.b}, ${alpha})`;
-        ctx.moveTo(particle.x, particle.y);
-        ctx.lineTo(particle.x + particle.vx, particle.y + particle.vy);
-        ctx.stroke();
-      });
-
-      time += config.timeScale;
       animationFrameRef.current = requestAnimationFrame(animate);
     };
 
@@ -239,4 +235,4 @@ const Background = () => {
   );
 };
 
-export default Background;
+export default NetworkBackground;
